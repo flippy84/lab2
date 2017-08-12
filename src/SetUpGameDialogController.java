@@ -55,12 +55,14 @@ public class SetUpGameDialogController {
     public Player getPlayer1() {
         Player player1 = player1Type.getSelectionModel().getSelectedItem();
         player1.name = player1Name.getText();
+        player1.markerID = Marker.White;
         return player1;
     }
 
     public Player getPlayer2() {
         Player player2 = player2Type.getSelectionModel().getSelectedItem();
         player2.name = player2Name.getText();
+        player2.markerID = Marker.Black;
         return player2;
     }
 }
