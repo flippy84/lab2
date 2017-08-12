@@ -1,15 +1,18 @@
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 
-public class SetupGameDialogController {
+public class SetUpGameDialogController {
     @FXML
     private ChoiceBox<Player> player1;
 
     @FXML
     private ChoiceBox<Player> player2;
+
+    public boolean startGame;
 
     @FXML
     private void initialize() {
@@ -30,16 +33,23 @@ public class SetupGameDialogController {
 
     @FXML
     private void onClickedStart() {
+        player1.getScene().getWindow().hide();
+        startGame = true;
     }
 
-    public SetupGameDialogController() {
+    @FXML
+    private  void onClickedQuit() {
+        player2.getScene().getWindow().hide();
+    }
+
+    public SetUpGameDialogController() {
     }
 
     public Player getPlayer1() {
-        return new HumanPlayer();
+        return player1.getSelectionModel().getSelectedItem();
     }
 
     public Player getPlayer2() {
-        return new HumanPlayer();
+        return player2.getSelectionModel().getSelectedItem();
     }
 }

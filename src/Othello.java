@@ -5,9 +5,12 @@ public class Othello extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        new SetupGameDialog();
-
-        GameManager gm = new GameManager(new HumanPlayer(), new HumanPlayer(), () -> { System.out.println("Hej"); });
-        primaryStage.show();
+        SetUpGameDialog setup = new SetUpGameDialog();
+        if(setup.startGame) {
+            GameManager gm = new GameManager(new HumanPlayer(), new HumanPlayer(), () -> {
+                System.out.println("Hej");
+            });
+            primaryStage.show();
+        }
     }
 }

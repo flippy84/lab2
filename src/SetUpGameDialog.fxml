@@ -6,10 +6,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="140.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SetupGameDialogController">
+<AnchorPane prefHeight="140.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SetUpGameDialogController">
    <children>
       <Button layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onMouseReleased="#onClickedStart" text="Start" />
-      <Button layoutX="140.0" layoutY="100.0" mnemonicParsing="false" text="Quit" />
+      <Button layoutX="140.0" layoutY="100.0" mnemonicParsing="false" onMouseReleased="#onClickedQuit" text="Quit" />
       <ChoiceBox fx:id="player1" layoutX="76.0" layoutY="20.0" prefWidth="150.0">
          <opaqueInsets>
             <Insets />
