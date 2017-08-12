@@ -4,27 +4,68 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="140.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SetUpGameDialogController">
+<AnchorPane prefHeight="200.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SetUpGameDialogController">
    <children>
-      <Button layoutX="60.0" layoutY="100.0" mnemonicParsing="false" onMouseReleased="#onClickedStart" text="Start" />
-      <Button layoutX="140.0" layoutY="100.0" mnemonicParsing="false" onMouseReleased="#onClickedQuit" text="Quit" />
-      <ChoiceBox fx:id="player1" layoutX="76.0" layoutY="20.0" prefWidth="150.0">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </ChoiceBox>
-      <ChoiceBox fx:id="player2" layoutX="76.0" layoutY="57.0" prefWidth="150.0" />
-      <Label layoutX="14.0" layoutY="14.0" text="Player 1">
+      <GridPane layoutX="51.0" layoutY="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ChoiceBox fx:id="player1Type" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </ChoiceBox>
+            <ChoiceBox fx:id="player2Type" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </ChoiceBox>
+            <Label text="Player type" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Label text="Name" GridPane.halignment="CENTER" />
+            <TextField fx:id="player1Name" text="Player1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="player2Name" text="Player2" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <Pane GridPane.columnSpan="2" GridPane.rowIndex="3">
+               <children>
+                  <HBox layoutX="105.0" layoutY="13.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" onMouseReleased="#onClickedStart" text="Start" />
+                        <Button mnemonicParsing="false" onMouseReleased="#onClickedQuit" text="Quit" />
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+         </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
-      </Label>
-      <Label layoutX="14.0" layoutY="51.0" text="Player 2">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </Label>
+      </GridPane>
    </children>
 </AnchorPane>
