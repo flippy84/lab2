@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Circle?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
-</fx:root>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane gridLinesVisible="true" layoutX="5.0" layoutY="5.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: green; -fx-border-color: black;">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+            <ColumnConstraints hgrow="SOMETIMES" prefWidth="50.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="50.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Circle fill="WHITE" radius="20.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <Circle radius="20.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <Circle fill="WHITE" radius="20.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <Circle radius="20.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </children>
+</Pane>
