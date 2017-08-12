@@ -10,6 +10,7 @@ public class Othello extends Application {
             GameManager gm = new GameManager(setup.player1, setup.player2, () -> {
                 System.out.println("Hej");
             });
+
             primaryStage.show();
         }
     }

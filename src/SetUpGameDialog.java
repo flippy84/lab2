@@ -14,7 +14,7 @@ public class SetUpGameDialog extends DialogPane {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SetUpGameDialog.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, root.prefWidth(-1), root.prefHeight(-1));
+        Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
@@ -22,7 +22,7 @@ public class SetUpGameDialog extends DialogPane {
         stage.setScene(scene);
         stage.showAndWait();
 
-        SetUpGameDialogController controller = loader.<SetUpGameDialogController>getController();
+        SetUpGameDialogController controller = loader.getController();
         startGame = controller.startGame;
         player1 = controller.getPlayer1();
         player2 = controller.getPlayer2();
