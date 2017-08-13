@@ -4,9 +4,10 @@ public class HumanPlayer extends Player {
     private GameBoard gameBoard;
 
     @Override
-    public void getMove() {
+    public Point getMove() {
         Point t = gameBoard.getInput();
         System.out.println(t);
+        return t;
     }
 
     @Override

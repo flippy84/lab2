@@ -17,7 +17,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameBoard extends Pane {
-    public GameBoard(GameFrame frame, GameGrid grid) throws Exception {
+    public GameBoard(GameFrame frame, GameGrid gameGrid) throws Exception {
+        gameGrid.addOnUpdate(this::UpdateGrid);
         lock = new ReentrantLock();
         newInput = lock.newCondition();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
@@ -25,11 +26,14 @@ public class GameBoard extends Pane {
         this.getChildren().add(loader.load());
     }
 
+    private Circle[][] circles;
+
     @FXML
     private GridPane grid;
 
     @FXML
     public void initialize() {
+        circles = new Circle[8][8];
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 Circle circle = new Circle(20, Color.TRANSPARENT);
@@ -46,6 +50,7 @@ public class GameBoard extends Pane {
                 else if(x == 4 && y == 3)
                     circle.setFill(Color.BLACK);
 
+                circles[x][y] = circle;
                 grid.add(circle, x, y);
             }
         }
@@ -69,15 +74,34 @@ public class GameBoard extends Pane {
         }
     }
 
+    private void UpdateGrid(GameGrid gameGrid) {
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                Marker m = gameGrid.getCell(x, y);
+                switch (m) {
+                    case Black:
+                        if (circles[x][y].getFill() != Color.BLACK)
+                            circles[x][y].setFill(Color.BLACK);
+                        break;
+                    case White:
+                        if (circles[x][y].getFill() != Color.WHITE)
+                            circles[x][y].setFill(Color.WHITE);
+                        break;
+                }
+            }
+        }
+    }
+
     private void onMouseClicked(MouseEvent event) {
         int y = GridPane.getRowIndex((Node) event.getSource());
         int x = GridPane.getColumnIndex((Node) event.getSource());
-        Circle circle = (Circle) event.getSource();
-        circle.setFill(Color.YELLOW);
 
         lock.lock();
-        input = new Point(x, y);
-        newInput.signalAll();
-        lock.unlock();
+        try {
+            input = new Point(x, y);
+            newInput.signalAll();
+        } finally {
+            lock.unlock();
+        }
     }
 }

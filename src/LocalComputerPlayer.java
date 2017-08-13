@@ -1,7 +1,9 @@
+import java.awt.*;
+
 public class LocalComputerPlayer extends Player {
     @Override
-    public void getMove() {
-        
+    public Point getMove() {
+        return null;
     }
 
     @Override

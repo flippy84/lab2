@@ -1,3 +1,5 @@
+import java.awt.*;
+
 interface Callback
 {
     abstract void Call();
@@ -31,9 +33,11 @@ public class GameManager extends Thread {
 
     public void quit() {
         stopped = true;
+        this.interrupt();
     }
 
     private void Move(Player p) {
-        p.getMove();
+        Point t = p.getMove();
+        grid.setCell(p.markerID, t.x, t.y);
     }
 }
