@@ -8,17 +8,14 @@ import javafx.stage.WindowEvent;
 public class Othello extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        SetUpGameDialog setup = new SetUpGameDialog();
+        GameGrid grid = new GameGrid();
+        GameFrame frame = new GameFrame(grid);
+        SetUpGameDialog setup = new SetUpGameDialog(frame.getGameBoard());
         if(setup.startGame) {
-            GameGrid grid = new GameGrid();
-            GameFrame frame = new GameFrame(grid);
             Scene scene = new Scene(frame);
-
-            GameManager gm = new GameManager(setup.player1, setup.player2, () -> {
+            GameManager gm = new GameManager(setup.getPlayer1(), setup.getPlayer2(), () -> {
                 System.out.println("Hej");
             }, grid);
-            gm.play();
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Othello");
@@ -26,6 +23,7 @@ public class Othello extends Application {
                 gm.quit();
             });
             primaryStage.show();
+            gm.play();
         }
     }
 }

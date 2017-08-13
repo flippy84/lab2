@@ -11,8 +11,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.awt.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class GameBoard extends Pane {
     public GameBoard(GameFrame frame, GameGrid grid) throws Exception {
+        lock = new ReentrantLock();
+        newInput = lock.newCondition();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
         loader.setController(this);
         this.getChildren().add(loader.load());
@@ -44,10 +51,33 @@ public class GameBoard extends Pane {
         }
     }
 
+    private Condition newInput;
+    private Lock lock;
+    private Point input;
+
+    public Point getInput() {
+        lock.lock();
+        while (true) {
+            try {
+                newInput.await();
+                return input;
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
     private void onMouseClicked(MouseEvent event) {
         int y = GridPane.getRowIndex((Node) event.getSource());
         int x = GridPane.getColumnIndex((Node) event.getSource());
         Circle circle = (Circle) event.getSource();
         circle.setFill(Color.YELLOW);
+
+        lock.lock();
+        input = new Point(x, y);
+        newInput.signalAll();
+        lock.unlock();
     }
 }

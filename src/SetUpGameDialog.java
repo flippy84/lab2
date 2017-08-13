@@ -15,8 +15,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class SetUpGameDialog extends DialogPane {
     public boolean startGame;
+    private GameBoard board;
 
-    public SetUpGameDialog() throws Exception {
+    public SetUpGameDialog(GameBoard board) throws Exception {
+        this.board = board;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SetUpGameDialog.fxml"));
         loader.setController(this);
         Parent root = loader.load();
@@ -53,14 +55,14 @@ public class SetUpGameDialog extends DialogPane {
     @FXML
     private void initialize() {
         player1Type.setItems(FXCollections.<Player>observableArrayList(
-                new HumanPlayer(frame),
+                new HumanPlayer(board),
                 new LocalComputerPlayer(),
                 new RemoteComputerPlayer()
         ));
         player1Type.getSelectionModel().selectFirst();
 
         player2Type.setItems(FXCollections.<Player>observableArrayList(
-                new HumanPlayer(frame),
+                new HumanPlayer(board),
                 new LocalComputerPlayer(),
                 new RemoteComputerPlayer()
         ));
