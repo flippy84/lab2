@@ -4,7 +4,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class ToolbarController {
+public class Toolbar {
     @FXML
     private Button quit;
 
@@ -16,6 +16,6 @@ public class ToolbarController {
 
     @FXML
     public void onClickedNewGame() {
-        
+
     }
 }
