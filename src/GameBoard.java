@@ -3,9 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,21 +15,39 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameBoard extends Pane {
+    // Keep track of all markers for easy lookup
+    private Circle[][] circles;
+    @FXML
+    // Our UI grid with markers
+    private GridPane grid;
+
+    // Locks and Condition's for our getInput support function for the HumanPlayer class
+    private Condition newInput;
+    private Lock lock;
+    private Point input;
+
+    private GameGrid gameGrid;
+
     public GameBoard(GameFrame frame, GameGrid gameGrid) throws Exception {
-        gameGrid.addOnUpdate(this::UpdateGrid);
+        this.gameGrid = gameGrid;
+        // Add an event listener for game grid changes
+        gameGrid.addOnUpdate(this::updateGrid);
+
+        // Create a lock for input handling for the HumanPlayer class
         lock = new ReentrantLock();
         newInput = lock.newCondition();
+
+        // Load the UI from the fxml template
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
         loader.setController(this);
         this.getChildren().add(loader.load());
     }
 
-    private Circle[][] circles;
-
     @FXML
-    private GridPane grid;
-
-    @FXML
+    /*
+     * Add circles to every cell and save the reference in the circles matrix
+     * for easy lookup in our update function.
+     */
     public void initialize() {
         circles = new Circle[8][8];
         for (int y = 0; y < 8; y++) {
@@ -41,25 +57,19 @@ public class GameBoard extends Pane {
                 GridPane.setHalignment(circle, HPos.CENTER);
                 GridPane.setValignment(circle, VPos.CENTER);
 
-                if (x == 3 && y == 3)
-                    circle.setFill(Color.WHITE);
-                else if(x == 4 && y == 4)
-                    circle.setFill(Color.WHITE);
-                else if(x == 3 && y == 4)
-                    circle.setFill(Color.BLACK);
-                else if(x == 4 && y == 3)
-                    circle.setFill(Color.BLACK);
-
                 circles[x][y] = circle;
                 grid.add(circle, x, y);
             }
         }
+
+        updateGrid(gameGrid);
     }
 
-    private Condition newInput;
-    private Lock lock;
-    private Point input;
-
+    /*
+     * This is called from the HumanPlayer class from the GameManager thread.
+     * This function blocks until we get an onMouseClicked event from the UI.
+     * Return value is the coordinates of the clicked cell.
+     */
     public Point getInput() {
         lock.lock();
         while (true) {
@@ -74,7 +84,23 @@ public class GameBoard extends Pane {
         }
     }
 
-    private void UpdateGrid(GameGrid gameGrid) {
+    // Event handler for mouse clicks from the GridPane
+    private void onMouseClicked(MouseEvent event) {
+        int y = GridPane.getRowIndex((Node) event.getSource());
+        int x = GridPane.getColumnIndex((Node) event.getSource());
+
+        // We got user input, save it and send a signal so getInput returns
+        lock.lock();
+        try {
+            input = new Point(x, y);
+            newInput.signalAll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    // Iterate over all cells in the GameGrid and update the GridPane accordingly.
+    private void updateGrid(GameGrid gameGrid) {
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
                 Marker m = gameGrid.getCell(x, y);
@@ -89,19 +115,6 @@ public class GameBoard extends Pane {
                         break;
                 }
             }
-        }
-    }
-
-    private void onMouseClicked(MouseEvent event) {
-        int y = GridPane.getRowIndex((Node) event.getSource());
-        int x = GridPane.getColumnIndex((Node) event.getSource());
-
-        lock.lock();
-        try {
-            input = new Point(x, y);
-            newInput.signalAll();
-        } finally {
-            lock.unlock();
         }
     }
 }

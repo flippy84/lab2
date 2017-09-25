@@ -9,33 +9,26 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class SetUpGameDialog extends DialogPane {
     public boolean startGame;
     private GameBoard board;
 
     public SetUpGameDialog(GameBoard board) throws Exception {
         this.board = board;
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SetUpGameDialog.fxml"));
         loader.setController(this);
+
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
-        stage.setTitle("Setup players");
+        stage.setTitle("Nytt spel");
         stage.setScene(scene);
         stage.showAndWait();
-
-        /*Lock lock = new ReentrantLock();
-        Condition condition = lock.newCondition();
-        lock.wait();
-
-        condition.notify();*/
     }
 
     @FXML
@@ -49,8 +42,6 @@ public class SetUpGameDialog extends DialogPane {
 
     @FXML
     private TextField player2Name;
-
-    public GameFrame frame;
 
     @FXML
     private void initialize() {

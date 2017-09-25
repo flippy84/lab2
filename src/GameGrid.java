@@ -1,25 +1,29 @@
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.event.*;
-import javafx.scene.control.Button;
-import javafx.util.Pair;
+import javafx.scene.paint.Color;
 
-import java.util.List;
 import java.util.Vector;
 
 public class GameGrid  {
     private Marker[][] grid;
-    Vector<UpdateEvent> updateEventList;
+    private Vector<UpdateEvent> updateEventList;
 
     public GameGrid() {
         grid = new Marker[8][8];
+        updateEventList = new Vector();
+
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
-                grid[x][y] = Marker.None;
+                if (x == 3 && y == 3)
+                    grid[x][y] = Marker.White;
+                else if(x == 4 && y == 4)
+                    grid[x][y] = Marker.White;
+                else if(x == 3 && y == 4)
+                    grid[x][y] = Marker.Black;
+                else if(x == 4 && y == 3)
+                    grid[x][y] = Marker.Black;
+                else
+                    grid[x][y] = Marker.None;
             }
         }
-
-        updateEventList = new Vector();
     }
 
     public void setCell(Marker m, int x, int y) {
@@ -43,5 +47,5 @@ public class GameGrid  {
 }
 
 interface UpdateEvent {
-    public void Update(GameGrid sender);
+    void Update(GameGrid sender);
 }
