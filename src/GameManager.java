@@ -1,10 +1,4 @@
-import javafx.application.Platform;
 import java.awt.*;
-
-interface Callback
-{
-    abstract void Call();
-}
 
 public class GameManager extends Thread {
     private boolean stopped;
@@ -12,7 +6,7 @@ public class GameManager extends Thread {
     private Player player2;
     private GameGrid grid;
 
-    GameManager(Player player1, Player player2, Callback callback, GameGrid grid) {
+    GameManager(Player player1, Player player2, GameGrid grid) {
         this.player1 = player1;
         this.player2 = player2;
         this.grid = grid;

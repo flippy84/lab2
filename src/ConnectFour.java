@@ -15,7 +15,9 @@ public class ConnectFour extends Application {
         GameGrid gameGrid = new GameGrid();
         GameBoard gameBoard = new GameBoard(gameGrid);
         GameFrame frame = new GameFrame(gameBoard);
+        // GameBoard implements IHumanPlayerInput to support clicking on the GameBoard
         IHumanPlayerInput playerInput = gameBoard;
+        // Show a set up dialog and pass in IHumanPlayerInput for the HumanPlayer class
         SetUpGameDialog setup = new SetUpGameDialog(playerInput);
 
         Dialog dialog = new Dialog();
@@ -23,12 +25,11 @@ public class ConnectFour extends Application {
         dialog.setTitle("New game");
         Optional<ButtonType> result = dialog.showAndWait();
 
+        // If the user clicked OK start the game
         if (result.isPresent() && result.get().getButtonData() == ButtonData.OK_DONE)
         {
             Scene scene = new Scene(frame);
-            GameManager gm = new GameManager(setup.getPlayer1(), setup.getPlayer2(), () -> {
-                System.out.println("Hej");
-            }, gameGrid);
+            GameManager gm = new GameManager(setup.getPlayer1(), setup.getPlayer2(), gameGrid);
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Connect Four");
