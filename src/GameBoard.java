@@ -8,13 +8,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
 import java.awt.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class GameBoard extends Pane {
+public class GameBoard extends Pane implements IHumanPlayerInput {
     // Keep track of all markers for easy lookup
     private Circle[][] circles;
     @FXML
@@ -27,8 +26,10 @@ public class GameBoard extends Pane {
     private Point input;
 
     private GameGrid gameGrid;
+    private int columns = 7;
+    private int rows = 6;
 
-    public GameBoard(GameFrame frame, GameGrid gameGrid) throws Exception {
+    public GameBoard(GameGrid gameGrid) throws Exception {
         this.gameGrid = gameGrid;
         // Add an event listener for game grid changes
         gameGrid.addOnUpdate(this::updateGrid);
@@ -49,9 +50,9 @@ public class GameBoard extends Pane {
      * for easy lookup in our update function.
      */
     public void initialize() {
-        circles = new Circle[8][8];
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
+        circles = new Circle[columns][rows];
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
                 Circle circle = new Circle(20, Color.TRANSPARENT);
                 circle.setOnMouseClicked(this::onMouseClicked);
                 GridPane.setHalignment(circle, HPos.CENTER);
@@ -77,7 +78,7 @@ public class GameBoard extends Pane {
                 newInput.await();
                 return input;
             } catch (InterruptedException exception) {
-                exception.printStackTrace();
+                return null;
             } finally {
                 lock.unlock();
             }
@@ -101,8 +102,8 @@ public class GameBoard extends Pane {
 
     // Iterate over all cells in the GameGrid and update the GridPane accordingly.
     private void updateGrid(GameGrid gameGrid) {
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
                 Marker m = gameGrid.getCell(x, y);
                 switch (m) {
                     case Black:

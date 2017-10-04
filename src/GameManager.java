@@ -1,5 +1,4 @@
 import javafx.application.Platform;
-
 import java.awt.*;
 
 interface Callback
@@ -21,9 +20,15 @@ public class GameManager extends Thread {
 
     @Override
     public void run() {
-        while (!stopped) {
+        while (true) {
+            if (stopped)
+                break;
             Move(player1);
+
+            if (stopped)
+                break;
             Move(player2);
+
             System.out.println("Running");
         }
         System.out.println("Stopped");
@@ -42,12 +47,14 @@ public class GameManager extends Thread {
         Point point;
 
         point = player.getMove();
+        if (point == null)
+            return;
         while (!isValidMove(player, point)) {
             System.out.println("Invalid move!");
             point = player.getMove();
         }
 
-        grid.setCell(player.markerID, point.x, point.y);
+        grid.setCell(player.markerID, (int)point.getX(), (int)point.getY());
     }
 
     private boolean canMove(Player player) {
@@ -109,7 +116,7 @@ public class GameManager extends Thread {
             lastMarker = grid.getCell(x, y);
         }
 
-        if (i < )
+        //if (i < )
 
         return false;
     }

@@ -5,34 +5,27 @@ import java.util.Vector;
 public class GameGrid  {
     private Marker[][] grid;
     private Vector<UpdateEvent> updateEventList;
+    private int columns = 7;
+    private int rows = 6;
 
     public GameGrid() {
-        grid = new Marker[8][8];
+        grid = new Marker[columns][rows];
         updateEventList = new Vector();
 
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                if (x == 3 && y == 3)
-                    grid[x][y] = Marker.White;
-                else if(x == 4 && y == 4)
-                    grid[x][y] = Marker.White;
-                else if(x == 3 && y == 4)
-                    grid[x][y] = Marker.Black;
-                else if(x == 4 && y == 3)
-                    grid[x][y] = Marker.Black;
-                else
-                    grid[x][y] = Marker.None;
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                grid[x][y] = Marker.None;
             }
         }
     }
 
     public void setCell(Marker m, int x, int y) {
-        grid[x % 8][y % 8] = m;
+        grid[x % columns][y % rows] = m;
         fireOnUpdate();
     }
 
     public  Marker getCell(int x, int y) {
-        return grid[x % 8][y % 8];
+        return grid[x % columns][y % rows];
     }
 
     public void addOnUpdate(UpdateEvent e) {

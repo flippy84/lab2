@@ -1,13 +1,13 @@
 import java.awt.*;
 
 public class HumanPlayer extends Player {
-    private GameBoard gameBoard;
+    private IHumanPlayerInput playerInput;
 
     @Override
     public Point getMove() {
-        Point t = gameBoard.getInput();
-        System.out.println(t);
-        return t;
+        Point point = playerInput.getInput();
+        System.out.println(point);
+        return point;
     }
 
     @Override
@@ -15,7 +15,7 @@ public class HumanPlayer extends Player {
         return "HumanPlayer";
     }
 
-    public HumanPlayer(GameBoard gameBoard) {
-        this.gameBoard = gameBoard;
+    public HumanPlayer(IHumanPlayerInput playerInput) {
+        this.playerInput = playerInput;
     }
 }

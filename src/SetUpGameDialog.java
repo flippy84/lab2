@@ -3,32 +3,29 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class SetUpGameDialog extends DialogPane {
     public boolean startGame;
-    private GameBoard board;
+    private IHumanPlayerInput playerInput;
 
-    public SetUpGameDialog(GameBoard board) throws Exception {
-        this.board = board;
+    public SetUpGameDialog(IHumanPlayerInput playerInput) throws Exception {
+        //Save a reference to the board for human player input support
+        this.playerInput = playerInput;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SetUpGameDialog.fxml"));
+        loader.setRoot(this);
         loader.setController(this);
+        loader.load();
 
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setResizable(false);
-        stage.setTitle("Nytt spel");
-        stage.setScene(scene);
-        stage.showAndWait();
+        this.getButtonTypes().add(new ButtonType("OK", ButtonData.OK_DONE));
+        this.getButtonTypes().add(new ButtonType("Cancel", ButtonData.CANCEL_CLOSE));
     }
 
     @FXML
@@ -46,29 +43,18 @@ public class SetUpGameDialog extends DialogPane {
     @FXML
     private void initialize() {
         player1Type.setItems(FXCollections.<Player>observableArrayList(
-                new HumanPlayer(board),
+                new HumanPlayer(playerInput),
                 new LocalComputerPlayer(),
                 new RemoteComputerPlayer()
         ));
         player1Type.getSelectionModel().selectFirst();
 
         player2Type.setItems(FXCollections.<Player>observableArrayList(
-                new HumanPlayer(board),
+                new HumanPlayer(playerInput),
                 new LocalComputerPlayer(),
                 new RemoteComputerPlayer()
         ));
         player2Type.getSelectionModel().selectFirst();
-    }
-
-    @FXML
-    private void onClickedStart() {
-        player1Type.getScene().getWindow().hide();
-        startGame = true;
-    }
-
-    @FXML
-    private  void onClickedQuit() {
-        player1Type.getScene().getWindow().hide();
     }
 
     public Player getPlayer1() {

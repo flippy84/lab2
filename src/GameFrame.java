@@ -11,8 +11,8 @@ public class GameFrame extends BorderPane {
     private Label status;
     private GameBoard gameBoard;
 
-    public GameFrame(GameGrid grid) throws Exception {
-        gameBoard = new GameBoard(this, grid);
+    public GameFrame(GameBoard gameBoard) throws Exception {
+        this.gameBoard = gameBoard;
         this.setCenter(gameBoard);
 
         Parent toolbar = FXMLLoader.load(getClass().getResource("Toolbar.fxml"));
@@ -24,9 +24,5 @@ public class GameFrame extends BorderPane {
 
     public void setStatus(String text) {
         status.setText(text);
-    }
-
-    public GameBoard getGameBoard() {
-        return this.gameBoard;
     }
 }
