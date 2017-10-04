@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -8,6 +9,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+
 import java.awt.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -21,22 +24,24 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
     private GridPane grid;
 
     // Locks and Condition's for our getInput support function for the HumanPlayer class
-    private Condition newInput;
+    private Condition haveInput;
     private Lock lock;
     private Point input;
 
     private GameGrid gameGrid;
-    private int columns = 7;
-    private int rows = 6;
+    private int columns;
+    private int rows;
 
     public GameBoard(GameGrid gameGrid) throws Exception {
         this.gameGrid = gameGrid;
+        columns = gameGrid.getColumns();
+        rows = gameGrid.getRows();
         // Add an event listener for game grid changes
         gameGrid.addOnUpdate(this::updateGrid);
 
         // Create a lock for input handling for the HumanPlayer class
         lock = new ReentrantLock();
-        newInput = lock.newCondition();
+        haveInput = lock.newCondition();
 
         // Load the UI from the fxml template
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
@@ -66,6 +71,15 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
         updateGrid(gameGrid);
     }
 
+    public void quit() {
+        lock.lock();
+        try {
+            haveInput.signalAll();
+        } finally {
+            lock.unlock();
+        }
+    }
+
     /*
      * This is called from the HumanPlayer class from the GameManager thread.
      * This function blocks until we get an onMouseClicked event from the UI.
@@ -75,7 +89,7 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
         lock.lock();
         while (true) {
             try {
-                newInput.await();
+                haveInput.await();
                 return input;
             } catch (InterruptedException exception) {
                 return null;
@@ -90,11 +104,11 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
         int y = GridPane.getRowIndex((Node) event.getSource());
         int x = GridPane.getColumnIndex((Node) event.getSource());
 
-        // We got user input, save it and send a signal so getInput returns
+        // We got user input, save it and send a signal so haveInput returns
         lock.lock();
         try {
             input = new Point(x, y);
-            newInput.signalAll();
+            haveInput.signalAll();
         } finally {
             lock.unlock();
         }

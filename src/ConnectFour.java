@@ -14,7 +14,7 @@ public class ConnectFour extends Application {
     public void start(Stage primaryStage) throws Exception {
         GameGrid gameGrid = new GameGrid();
         GameBoard gameBoard = new GameBoard(gameGrid);
-        GameFrame frame = new GameFrame(gameBoard);
+        GameFrame gameFrame = new GameFrame(gameBoard);
         // GameBoard implements IHumanPlayerInput to support clicking on the GameBoard
         IHumanPlayerInput playerInput = gameBoard;
         // Show a set up dialog and pass in IHumanPlayerInput for the HumanPlayer class
@@ -28,17 +28,18 @@ public class ConnectFour extends Application {
         // If the user clicked OK start the game
         if (result.isPresent() && result.get().getButtonData() == ButtonData.OK_DONE)
         {
-            Scene scene = new Scene(frame);
-            GameManager gm = new GameManager(setup.getPlayer1(), setup.getPlayer2(), gameGrid);
+            Scene scene = new Scene(gameFrame);
+            GameManager gameManager = new GameManager(setup.getPlayer1(), setup.getPlayer2(), gameGrid);
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Connect Four");
             primaryStage.setOnCloseRequest(event -> {
-                gm.quit();
+                gameManager.quit();
+                gameBoard.quit();
             });
 
             primaryStage.show();
-            gm.play();
+            gameManager.play();
         }
     }
 }

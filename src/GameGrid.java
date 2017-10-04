@@ -28,6 +28,14 @@ public class GameGrid  {
         return grid[x % columns][y % rows];
     }
 
+    public int getColumns() {
+        return columns;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
     public void addOnUpdate(UpdateEvent e) {
         updateEventList.add(e);
     }
