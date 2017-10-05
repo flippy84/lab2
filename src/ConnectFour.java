@@ -9,6 +9,8 @@ import javafx.scene.control.ButtonBar.*;
 
 import java.util.Optional;
 
+// TODO: Add a global settings class, singleton?
+
 public class ConnectFour extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
