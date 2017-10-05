@@ -37,11 +37,10 @@ public class GameManager extends Thread {
     }
 
     private void Move(Player player) {
-        Point point;
-
-        point = player.getMove();
+        Point point = player.getMove();
         if (quit)
             return;
+
         while (!isValidMove(point)) {
             System.out.println("Invalid move!");
             point = player.getMove();
@@ -49,8 +48,13 @@ public class GameManager extends Thread {
 
         Point landingPoint = getLandingPoint(point);
         gameGrid.setCell(player.markerID, landingPoint.x, landingPoint.y);
+        if (hasWon(player, landingPoint)) {
+            System.out.println(player.name + " wins!");
+            quit = true;
+        }
     }
 
+    // Place the circle in the first free cell in the clicked column
     private Point getLandingPoint(Point point) {
         int y;
         for (y = point.y; y < gameGrid.getRows() - 1; y++) {
@@ -66,12 +70,19 @@ public class GameManager extends Thread {
         return gameGrid.getCell(point.x, point.y) == Marker.None;
     }
 
+    private boolean hasWon(Player player, Point point) {
+        for (Direction direction : Direction.values()) {
+            if (search(player, point, direction))
+                return true;
+        }
+        return false;
+    }
+
     enum Direction { Up, Down, Left, Right, UpLeft, UpRight, DownLeft, DownRight };
 
+    // Search for four consecutive markers in all directions instead of up
     private boolean search(Player player, Point point, Direction direction) {
         switch (direction) {
-            case Up:
-                return search(player, point, 0, -1);
             case Down:
                 return search(player, point, 0, 1);
             case Left:
@@ -86,51 +97,27 @@ public class GameManager extends Thread {
                 return search(player, point, -1, 1);
             case DownRight:
                 return search(player, point, 1, 1);
+            default:
+                return false;
         }
-        return false;
     }
 
     private boolean search(Player player, Point point, int xIncrement, int yIncrement) {
-        Marker opponentMarker = player.markerID == Marker.Black ? Marker.White : Marker.Black;
-        Marker playerMarker = player.markerID;
-        Marker lastMarker = gameGrid.getCell(point.x, point.y);
-        Marker secondLastMarker;
-        int i = 0;
+        return search(player, point.x, point.y, xIncrement, yIncrement, 0);
+    }
 
-        for (int x = point.x, y = point.y; x >= 0 && x < 8 && y >= 0 && y < 8; x += xIncrement, y += yIncrement, i++) {
-            secondLastMarker = lastMarker;
-            if (i == 0 && gameGrid.getCell(x, y) != Marker.None)
-                return false;
-            else if (i == 1 && gameGrid.getCell(x, y) != opponentMarker)
-                return false;
-            else if (gameGrid.getCell(x, y) == Marker.None)
-                break;
+    private boolean search(Player player, int x, int y, int xIncrement, int yIncrement, int level) {
+        if (level == 4)
+            return true;
 
-            lastMarker = gameGrid.getCell(x, y);
+        if (inGrid(x, y) && gameGrid.getCell(x, y) == player.markerID) {
+            return search(player, x + xIncrement, y + yIncrement, xIncrement, yIncrement, level + 1);
         }
-
-        //if (i < )
 
         return false;
     }
 
-    private boolean hasAdjacentMarker(Player player, Point point) {
-        Marker opponentMarker = player.markerID == Marker.Black ? Marker.White : Marker.Black;
-        Marker playerMarker = player.markerID;
-        int x = point.x;
-        int y = point.y;
-
-        // Check for at least one adjacent opponent marker
-        if (x > 0 && y > 0 && opponentMarker == gameGrid.getCell(x - 1, y - 1) ||
-            x > 0 &&          opponentMarker == gameGrid.getCell(x - 1, y) ||
-            x > 0 && y < 7 && opponentMarker == gameGrid.getCell(x - 1, y + 1) ||
-            y > 0 &&          opponentMarker == gameGrid.getCell(x, y - 1) ||
-            y < 7 &&          opponentMarker == gameGrid.getCell(x, y + 1) ||
-            x < 7 && y > 0 && opponentMarker == gameGrid.getCell(x + 1, y - 1) ||
-            x < 7 &&          opponentMarker == gameGrid.getCell(x + 1, y) ||
-            x < 7 && y < 7 && opponentMarker == gameGrid.getCell(x + 1, y + 1))
-            return true;
-        else
-            return false;
+    private boolean inGrid(int x, int y) {
+        return (x < gameGrid.getColumns() && y < gameGrid.getRows() && x >= 0 && y >= 0);
     }
 }
