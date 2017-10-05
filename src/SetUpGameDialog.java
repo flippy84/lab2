@@ -12,12 +12,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class SetUpGameDialog extends DialogPane {
-    public boolean startGame;
     private IHumanPlayerInput playerInput;
+    private GameGrid gameGrid;
 
-    public SetUpGameDialog(IHumanPlayerInput playerInput) throws Exception {
+    public SetUpGameDialog(IHumanPlayerInput playerInput, GameGrid gameGrid) throws Exception {
         //Save a reference to the board for human player input support
         this.playerInput = playerInput;
+        this.gameGrid = gameGrid;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SetUpGameDialog.fxml"));
         loader.setRoot(this);
@@ -44,14 +45,14 @@ public class SetUpGameDialog extends DialogPane {
     private void initialize() {
         player1Type.setItems(FXCollections.<Player>observableArrayList(
                 new HumanPlayer(playerInput),
-                new LocalComputerPlayer(),
+                new LocalComputerPlayer(gameGrid),
                 new RemoteComputerPlayer()
         ));
         player1Type.getSelectionModel().selectFirst();
 
         player2Type.setItems(FXCollections.<Player>observableArrayList(
                 new HumanPlayer(playerInput),
-                new LocalComputerPlayer(),
+                new LocalComputerPlayer(gameGrid),
                 new RemoteComputerPlayer()
         ));
         player2Type.getSelectionModel().selectFirst();

@@ -18,7 +18,7 @@ public class ConnectFour extends Application {
         // GameBoard implements IHumanPlayerInput to support clicking on the GameBoard
         IHumanPlayerInput playerInput = gameBoard;
         // Show a set up dialog and pass in IHumanPlayerInput for the HumanPlayer class
-        SetUpGameDialog setup = new SetUpGameDialog(playerInput);
+        SetUpGameDialog setup = new SetUpGameDialog(playerInput, gameGrid);
 
         Dialog dialog = new Dialog();
         dialog.setDialogPane(setup);
