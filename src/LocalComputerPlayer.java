@@ -12,8 +12,13 @@ public class LocalComputerPlayer extends Player {
 
     @Override
     public Point getMove() {
-        int x = random.nextInt(gameGrid.getColumns());
-        return new Point(x, 0);
+        int x = 0;
+        int y = 0;
+        while (true) {
+            x = random.nextInt(gameGrid.getColumns());
+            if (gameGrid.getCell(x, y) == Marker.None)
+                return new Point(x, y);
+        }
     }
 
     @Override
