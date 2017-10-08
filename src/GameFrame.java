@@ -1,28 +1,51 @@
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 public class GameFrame extends BorderPane {
-    private Label status;
-    private GameBoard gameBoard;
+    private Label statusLabel;
 
     public GameFrame(GameBoard gameBoard) throws Exception {
-        this.gameBoard = gameBoard;
+        this.setTop(createTop());
         this.setCenter(gameBoard);
-
-        Parent toolbar = FXMLLoader.load(getClass().getResource("Toolbar.fxml"));
-        this.setTop(toolbar);
-
-        status = new Label();
-        this.setBottom(status);
+        this.setBottom(createBottom());
     }
 
+    private Node createTop() {
+        Button newGameButton = new Button("New game");
+        newGameButton.setOnMouseClicked((event -> {
+            newGameEvent.fire(this);
+        }));
+
+        Button quitButton = new Button("Quit");
+        newGameButton.setOnMouseClicked((event -> {
+            quitEvent.fire(this);
+        }));
+
+        HBox buttons = new HBox();
+        HBox.setMargin(newGameButton, new Insets(5, 5, 5, 5));
+        HBox.setMargin(quitButton, new Insets(5, 5, 5, 5));
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().addAll(newGameButton, quitButton);
+
+        return buttons;
+    }
+
+    private Node createBottom() {
+        Label statusLabel = new Label();
+        statusLabel.setPadding(new Insets(5, 5, 5, 5));
+
+        return statusLabel;
+    }
+
+    public Event quitEvent;
+    public Event newGameEvent;
+
     public void setStatus(String text) {
-        status.setText(text);
+        statusLabel.setText(text);
     }
 }

@@ -1,16 +1,14 @@
-import javafx.scene.paint.Color;
-
 import java.util.Vector;
 
 public class GameGrid  {
     private Marker[][] grid;
-    private Vector<UpdateEvent> updateEventList;
+    private Vector<Event> gameGridUpdateList;
     private int columns = 7;
     private int rows = 6;
 
     public GameGrid() {
         grid = new Marker[columns][rows];
-        updateEventList = new Vector();
+        gameGridUpdateList = new Vector();
 
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
@@ -36,17 +34,17 @@ public class GameGrid  {
         return rows;
     }
 
-    public void addOnUpdate(UpdateEvent e) {
-        updateEventList.add(e);
+    public void addOnUpdate(Event e) {
+        gameGridUpdateList.add(e);
     }
 
     private void fireOnUpdate() {
-        for (UpdateEvent e : updateEventList) {
-            e.Update(this);
+        for (Event e : gameGridUpdateList) {
+            e.fire(this);
         }
     }
 }
 
-interface UpdateEvent {
-    void Update(GameGrid sender);
+interface Event {
+    void fire(Object sender);
 }

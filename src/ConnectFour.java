@@ -17,6 +17,7 @@ public class ConnectFour extends Application {
         GameGrid gameGrid = new GameGrid();
         GameBoard gameBoard = new GameBoard(gameGrid);
         GameFrame gameFrame = new GameFrame(gameBoard);
+        // TODO: WIP, add event handlers here
         // GameBoard implements IHumanPlayerInput to support clicking on the GameBoard
         IHumanPlayerInput playerInput = gameBoard;
         // Show a set up dialog and pass in IHumanPlayerInput for the HumanPlayer class

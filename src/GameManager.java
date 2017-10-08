@@ -13,15 +13,19 @@ public class GameManager {
             while (true) {
                 if (quit)
                     break;
-                Move(player1);
+                move(player1);
 
                 if (quit)
                     break;
-                Move(player2);
+                move(player2);
 
                 System.out.println("Running");
             }
             System.out.println("Stopped");
+        }
+
+        public void stop() {
+            quit = true;
         }
     }
 
@@ -41,7 +45,7 @@ public class GameManager {
         quit = true;
     }
 
-    private void Move(Player player) {
+    private void move(Player player) {
         Point point = player.getMove();
         if (quit)
             return;
