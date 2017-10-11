@@ -5,11 +5,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class GameFrame extends BorderPane {
     private Label statusLabel;
+    private GameManager gameManager;
 
-    public GameFrame(GameBoard gameBoard) throws Exception {
+    public GameFrame(GameManager gameManager, GameBoard gameBoard) throws Exception {
+        this.gameManager = gameManager;
+
         this.setTop(createTop());
         this.setCenter(gameBoard);
         this.setBottom(createBottom());
@@ -18,12 +23,13 @@ public class GameFrame extends BorderPane {
     private Node createTop() {
         Button newGameButton = new Button("New game");
         newGameButton.setOnMouseReleased((event -> {
-            newGameEvent.fire(this);
+            gameManager.newGame();
         }));
 
         Button quitButton = new Button("Quit");
         quitButton.setOnMouseReleased((event -> {
-            quitEvent.fire(this);
+            Stage stage = (Stage)quitButton.getScene().getWindow();
+            stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }));
 
         HBox buttons = new HBox();
@@ -36,14 +42,11 @@ public class GameFrame extends BorderPane {
     }
 
     private Node createBottom() {
-        Label statusLabel = new Label();
+        statusLabel = new Label();
         statusLabel.setPadding(new Insets(5, 5, 5, 5));
 
         return statusLabel;
     }
-
-    public Event quitEvent;
-    public Event newGameEvent;
 
     public void setStatus(String text) {
         statusLabel.setText(text);
