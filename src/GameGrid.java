@@ -44,7 +44,3 @@ public class GameGrid extends Observable {
         notifyObservers();
     }
 }
-
-interface Event {
-    void fire(Object sender);
-}
