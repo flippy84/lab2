@@ -17,7 +17,6 @@ public class ConnectFour extends Application {
         GameGrid gameGrid = new GameGrid();
         GameBoard gameBoard = new GameBoard(gameGrid);
         GameFrame gameFrame = new GameFrame(gameBoard);
-        // TODO: WIP, add event handlers here
         // GameBoard implements IHumanPlayerInput to support clicking on the GameBoard
         IHumanPlayerInput playerInput = gameBoard;
         // Show a set up dialog and pass in IHumanPlayerInput for the HumanPlayer class
@@ -40,6 +39,14 @@ public class ConnectFour extends Application {
                 gameManager.quit();
                 gameBoard.quit();
             });
+
+            // Event handlers for the GameFrame buttons
+            gameFrame.newGameEvent = (sender) -> {
+                gameManager.newGame();
+            };
+            gameFrame.quitEvent = (sender) -> {
+                primaryStage.fireEvent(new WindowEvent(primaryStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+            };
 
             primaryStage.show();
             gameManager.play();

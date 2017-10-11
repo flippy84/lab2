@@ -1,4 +1,5 @@
 import java.awt.*;
+import static java.lang.Thread.*;
 
 public class GameManager {
     private boolean quit;
@@ -6,6 +7,7 @@ public class GameManager {
     private Player player2;
     private GameGrid gameGrid;
     private GameLoop gameLoop;
+    private Thread gameLoopThread;
 
     private class GameLoop implements Runnable {
         @Override
@@ -29,6 +31,21 @@ public class GameManager {
         }
     }
 
+    public void newGame() {
+        quit = true;
+        gameLoopThread.interrupt();
+        try {
+            gameLoopThread.join();
+        } catch (InterruptedException e) {
+            return;
+        }
+
+        gameGrid.reset();
+        quit = false;
+        gameLoopThread = new Thread(gameLoop);
+        gameLoopThread.start();
+    }
+
     GameManager(Player player1, Player player2, GameGrid gameGrid) {
         this.player1 = player1;
         this.player2 = player2;
@@ -37,8 +54,8 @@ public class GameManager {
     }
 
     public void play() {
-        Thread thread = new Thread(gameLoop);
-        thread.start();
+        gameLoopThread = new Thread(gameLoop);
+        gameLoopThread.start();
     }
 
     public void quit() {

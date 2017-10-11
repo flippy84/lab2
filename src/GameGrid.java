@@ -2,7 +2,7 @@ import java.util.Vector;
 
 public class GameGrid  {
     private Marker[][] grid;
-    private Vector<Event> gameGridUpdateList;
+    private Vector<GridEvent> gameGridUpdateList;
     private int columns = 7;
     private int rows = 6;
 
@@ -34,17 +34,30 @@ public class GameGrid  {
         return rows;
     }
 
-    public void addOnUpdate(Event e) {
+    public void addOnUpdate(GridEvent e) {
         gameGridUpdateList.add(e);
     }
 
     private void fireOnUpdate() {
-        for (Event e : gameGridUpdateList) {
+        for (GridEvent e : gameGridUpdateList) {
             e.fire(this);
         }
+    }
+
+    public void reset() {
+        for (int x = 0; x < columns; x++) {
+            for (int y = 0; y < rows; y++) {
+                grid[x][y] = Marker.None;
+            }
+        }
+        fireOnUpdate();
     }
 }
 
 interface Event {
     void fire(Object sender);
+}
+
+interface GridEvent {
+    void fire(GameGrid sender);
 }

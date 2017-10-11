@@ -118,12 +118,13 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
                 Marker m = gameGrid.getCell(x, y);
                 switch (m) {
                     case Black:
-                        if (circles[x][y].getFill() != Color.BLACK)
-                            circles[x][y].setFill(Color.BLACK);
+                        circles[x][y].setFill(Color.BLACK);
                         break;
                     case White:
-                        if (circles[x][y].getFill() != Color.WHITE)
                             circles[x][y].setFill(Color.WHITE);
+                        break;
+                    case None:
+                        circles[x][y].setFill(Color.TRANSPARENT);
                         break;
                 }
             }

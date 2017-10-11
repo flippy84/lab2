@@ -17,12 +17,12 @@ public class GameFrame extends BorderPane {
 
     private Node createTop() {
         Button newGameButton = new Button("New game");
-        newGameButton.setOnMouseClicked((event -> {
+        newGameButton.setOnMouseReleased((event -> {
             newGameEvent.fire(this);
         }));
 
         Button quitButton = new Button("Quit");
-        newGameButton.setOnMouseClicked((event -> {
+        quitButton.setOnMouseReleased((event -> {
             quitEvent.fire(this);
         }));
 
