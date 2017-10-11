@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.awt.*;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -33,8 +35,8 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
         this.gameGrid = gameGrid;
         columns = gameGrid.getColumns();
         rows = gameGrid.getRows();
-        // Add an event listener for game grid changes
-        gameGrid.addOnUpdate(this::updateGrid);
+        // Add an observer for game grid changes
+        gameGrid.addObserver((o, arg) -> updateGrid((GameGrid)o));
 
         // Create a lock for input handling for the HumanPlayer class
         lock = new ReentrantLock();
