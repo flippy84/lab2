@@ -5,9 +5,7 @@ public class HumanPlayer extends Player {
 
     @Override
     public Point getMove() {
-        Point point = playerInput.getInput();
-        System.out.println(point);
-        return point;
+        return playerInput.getInput();
     }
 
     @Override

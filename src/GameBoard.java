@@ -70,15 +70,6 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
         updateGrid(gameGrid);
     }
 
-    public void quit() {
-        lock.lock();
-        try {
-            haveInput.signalAll();
-        } finally {
-            lock.unlock();
-        }
-    }
-
     /*
      * This is called from the HumanPlayer class from the GameManager thread.
      * This function blocks until we get an onMouseClicked event from the UI.

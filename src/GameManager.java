@@ -1,8 +1,7 @@
 import java.awt.*;
-import static java.lang.Thread.*;
 
 public class GameManager {
-    private boolean quit;
+    private volatile boolean stop;
     private Player player1;
     private Player player2;
     private GameGrid gameGrid;
@@ -13,37 +12,20 @@ public class GameManager {
         @Override
         public void run() {
             while (true) {
-                if (quit)
-                    break;
                 move(player1);
-
-                if (quit)
+                if (stop)
                     break;
+
                 move(player2);
-
-                System.out.println("Running");
+                if (stop)
+                    break;
             }
-            System.out.println("Stopped");
-        }
-
-        public void stop() {
-            quit = true;
         }
     }
 
     public void newGame() {
-        quit = true;
-        gameLoopThread.interrupt();
-        try {
-            gameLoopThread.join();
-        } catch (InterruptedException e) {
-            return;
-        }
-
-        gameGrid.reset();
-        quit = false;
-        gameLoopThread = new Thread(gameLoop);
-        gameLoopThread.start();
+        stop();
+        play();
     }
 
     GameManager(Player player1, Player player2, GameGrid gameGrid) {
@@ -54,17 +36,29 @@ public class GameManager {
     }
 
     public void play() {
+        gameGrid.reset();
+        stop = false;
         gameLoopThread = new Thread(gameLoop);
         gameLoopThread.start();
     }
 
+    private void stop() {
+        stop = true;
+        gameLoopThread.interrupt();
+        try {
+            gameLoopThread.join();
+        } catch (InterruptedException e) {
+            return;
+        }
+    }
+
     public void quit() {
-        quit = true;
+        stop();
     }
 
     private void move(Player player) {
         Point point = player.getMove();
-        if (quit)
+        if (stop)
             return;
 
         while (!isValidMove(point)) {
@@ -76,7 +70,7 @@ public class GameManager {
         gameGrid.setCell(player.markerID, landingPoint.x, landingPoint.y);
         if (hasWon(player, landingPoint)) {
             System.out.println(player.name + " wins!");
-            quit = true;
+            stop = true;
         }
     }
 
