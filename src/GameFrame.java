@@ -26,7 +26,6 @@ public class GameFrame extends BorderPane {
 
         Button quitButton = new Button("Quit");
         quitButton.setOnMouseReleased((event -> {
-            gameManager.quit();
             Stage stage = (Stage)quitButton.getScene().getWindow();
             stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }));

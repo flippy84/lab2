@@ -52,10 +52,11 @@ public class GameGrid extends Observable {
             for (int y = 0; y < rows; y++) {
                 if (grid[x][y] == Marker.None) {
                     moves.add(new Point(x, y));
+                    continue;
                 }
             }
         }
 
-        return (Point[])moves.toArray();
+        return moves.toArray(new Point[moves.size()]);
     }
 }

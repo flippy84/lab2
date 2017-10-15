@@ -29,6 +29,7 @@ public class ConnectFour extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Connect Four");
+            primaryStage.setOnCloseRequest(event -> gameManager.quit());
 
             primaryStage.show();
             gameManager.play();

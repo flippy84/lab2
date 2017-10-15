@@ -4,6 +4,7 @@ public class ConnectFourServer {
     public static void main(String[] args) {
         InetAddress localhost;
         DatabaseManager databaseManager;
+        int port = 5000;
 
         try {
             localhost = Inet4Address.getLocalHost();
@@ -15,13 +16,13 @@ public class ConnectFourServer {
         ServerSocket server;
         Socket client;
         try {
-            server = new ServerSocket(5000);
+            server = new ServerSocket(port);
         } catch (Exception e) {
             return;
         }
 
         databaseManager = new DatabaseManager();
-        if (!databaseManager.updateServerDetails(localhost, 600)) {
+        if (!databaseManager.updateServerDetails(localhost, port)) {
             System.out.println("Error updating database");
             return;
         }
