@@ -1,43 +1,42 @@
 import javax.xml.crypto.Data;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.IOException;
+import java.net.*;
 import java.sql.*;
 
 public class ConnectFourServer {
     public static void main(String[] args) {
-        DatabaseManager databaseManager = new DatabaseManager();
-        ServerDetails serverDetails = databaseManager.getServerDetails();
-
-        Connection connection;
-        String address;
-        int port = 66;
-        InetAddress inetAddress = null;
+        InetAddress localhost;
+        DatabaseManager databaseManager;
 
         try {
-            inetAddress = Inet4Address.getLocalHost();
+            localhost = Inet4Address.getLocalHost();
         } catch (UnknownHostException e) {
-            System.out.println("Unknown host");
+            System.out.println("Error getting local host address");
             return;
         }
 
-        address = inetAddress.getHostAddress();
+        ServerSocket serverSocket;
+        Socket clientSocket;
+        try {
+            serverSocket = new ServerSocket(5000);
+        } catch (Exception e) {
+            return;
+        }
+
+        databaseManager = new DatabaseManager();
+        if (!databaseManager.updateServerDetails(localhost, 600)) {
+            System.out.println("Error updating database");
+            return;
+        }
 
         try {
-            connection = DriverManager.getConnection("jdbc:sqlserver://hitsql-db.hb.se:56077;databaseName=oomuht1608;user=oomuht1608;password=spad66;");
-            Statement statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-            ResultSet result = statement.executeQuery("SELECT [ipAddress], [port] FROM [dbo].[ConnectFourServer] WHERE [groupId] = 8");
-            if (result.next()) {
-                result.updateString("ipAddress", address);
-                result.updateInt("port", port);
-                result.updateRow();
-            } else {
-                statement.executeQuery(String.format("INSERT INTO [dbo].[ConnectFourServer] ([groupId], [ipAddres], [port]) VALUES (8, '%s', %d", address, port));
+            while (true) {
+                clientSocket = serverSocket.accept();
+                ServerWorker worker = new ServerWorker(clientSocket);
+                worker.start();
             }
+        } catch (Exception e) {
 
-        } catch (SQLException e) {
-            System.out.println("Couldn't update database");
-            return;
         }
     }
 }
