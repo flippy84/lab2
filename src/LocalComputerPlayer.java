@@ -12,12 +12,10 @@ public class LocalComputerPlayer extends Player {
 
     @Override
     public Point getMove() {
-        //TODO: Use gameGrid.validMoves
-        while (true) {
-            int x = random.nextInt(gameGrid.getColumns());
-            if (gameGrid.getCell(x, 0) == Marker.None)
-                return new Point(x, 0);
-        }
+        Point[] moves = gameGrid.getValidMoves();
+        System.out.println(moves.length);
+        int i = random.nextInt(moves.length);
+        return moves[i];
     }
 
     @Override

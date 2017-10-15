@@ -45,14 +45,14 @@ public class GameGrid extends Observable {
         notifyObservers();
     }
 
-    public Point[] validMoves() {
+    public Point[] getValidMoves() {
         Vector<Point> moves = new Vector<>();
 
         for (int x = 0; x < columns; x++) {
-            for (int y = 0; y < rows; y++) {
+            for (int y = rows - 1; y >= 0; y--) {
                 if (grid[x][y] == Marker.None) {
                     moves.add(new Point(x, y));
-                    continue;
+                    break;
                 }
             }
         }

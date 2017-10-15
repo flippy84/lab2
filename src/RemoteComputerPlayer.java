@@ -1,5 +1,3 @@
-import com.sun.javafx.scene.traversal.SubSceneTraversalEngine;
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,7 +24,7 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         }
 
         out.print("GET_MOVE");
-        Point[] moves = gameGrid.validMoves();
+        Point[] moves = gameGrid.getValidMoves();
         for (Point move : moves) {
             out.print(String.format(" %d,%d", move.x, move.y));
         }
