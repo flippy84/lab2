@@ -4,20 +4,15 @@ public class ConnectFourServer {
     public static void main(String[] args) {
         InetAddress localhost;
         DatabaseManager databaseManager;
+        ServerSocket server;
+        Socket client;
         int port = 5000;
 
         try {
             localhost = Inet4Address.getLocalHost();
-        } catch (UnknownHostException e) {
-            System.out.println("Error getting local host address");
-            return;
-        }
-
-        ServerSocket server;
-        Socket client;
-        try {
             server = new ServerSocket(port);
         } catch (Exception e) {
+            e.printStackTrace();
             return;
         }
 

@@ -10,64 +10,83 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RemoteComputerPlayer extends Player implements Runnable {
-    Socket socket;
-    GameGrid gameGrid;
-    BufferedReader in;
-    PrintWriter out;
+    private Socket socket;
+    private GameGrid gameGrid;
+    private BufferedReader in;
+    private PrintWriter out;
+    private Pattern pattern;
+
+    public RemoteComputerPlayer(Socket socket) {
+        this();
+        this.socket = socket;
+    }
+
+    public RemoteComputerPlayer(GameGrid gameGrid) {
+        this();
+        this.gameGrid = gameGrid;
+    }
+
+    private RemoteComputerPlayer() {
+        pattern = Pattern.compile("(\\d+),(\\d+)");
+    }
 
     @Override
     public Point getMove() {
-        String line;
+        String response;
+        Point[] moves;
+        Matcher matcher;
+        int x, y;
 
+        // Connect and init socket if not done yet
         if (socket == null) {
-            connect();
+            if (!connect())
+                return null;
         }
 
+        // Request a move from the server, format is GET_MOVE x,y ...
         out.print("GET_MOVE");
-        Point[] moves = gameGrid.getValidMoves();
+        moves = gameGrid.getValidMoves();
         for (Point move : moves) {
             out.print(String.format(" %d,%d", move.x, move.y));
         }
         out.println();
         out.flush();
 
+        // Save the server response
         try {
-            line = in.readLine();
+            response = in.readLine();
+            if (response == null)
+                return null;
         } catch (Exception e) {
             return null;
         }
 
-        Pattern pattern = Pattern.compile("(\\d+),(\\d+)");
-        Matcher matcher = pattern.matcher(line);
-        System.out.println(line);
-        System.out.println(matcher.groupCount());
+        // Parse response
+        matcher = pattern.matcher(response);
         if (matcher.matches()) {
-            int x = Integer.parseInt(matcher.group(1));
-            int y = Integer.parseInt(matcher.group(2));
+            x = Integer.parseInt(matcher.group(1));
+            y = Integer.parseInt(matcher.group(2));
             return new Point(x, y);
         }
 
         return null;
     }
 
-    public RemoteComputerPlayer(Socket socket) {
-        this.socket = socket;
-    }
-
-    public RemoteComputerPlayer(GameGrid gameGrid) {
-        this.gameGrid = gameGrid;
-    }
-
-    private void connect() {
+    private boolean connect() {
+        // Get server details from SQL Server
         DatabaseManager databaseManager = new DatabaseManager();
         ServerDetails details = databaseManager.getServerDetails();
+
+        // Set up input and output streams
         try {
             socket = new Socket(details.inetAddress, details.port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
     @Override
@@ -77,59 +96,72 @@ public class RemoteComputerPlayer extends Player implements Runnable {
 
     @Override
     public void run() {
+        String request;
+
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
             System.out.println("< " + socket.getInetAddress().getHostAddress() + " connected");
 
             while (true) {
-                String line = in.readLine();
-                if (line == null) {
+                request = in.readLine();
+                if (request == null) {
                     System.out.println("< " + socket.getInetAddress().getHostAddress() + " disconnected");
                     return;
                 }
-                handleInput(line, out);
+                handleRequest(request, out);
             }
         } catch (SocketException e) {
+            System.out.println("< " + socket.getInetAddress().getHostAddress() + " disconnected unexpectedly");
             return;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // Called by the client when closing
     public void close() {
         try {
             socket.close();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void handleInput(String line, PrintWriter out) {
-        String parts[] = line.split(" ");
-        Vector<Point> points = new Vector<>();
-        Pattern pattern = Pattern.compile("(\\d+),(\\d+)");
+    private void handleRequest(String request, PrintWriter out) {
+        Vector<Point> moves = new Vector<>();
+        Point move;
+        Matcher matcher;
+        String requestSplits[] = request.split(" ");
+        int x, y;
+        Random random;
 
-        if (parts[0].equals("GET_MOVE")) {
+        // Parse request and save moves
+        if ("GET_MOVE".equals(requestSplits[0])) {
             System.out.print("< " + socket.getInetAddress().getHostAddress() + " requested next move {");
-            for (int i = 1; i < parts.length; i++) {
-                Matcher matcher = pattern.matcher(parts[i]);
+            for (int i = 1; i < requestSplits.length; i++) {
+                matcher = pattern.matcher(requestSplits[i]);
                 if (matcher.matches()) {
-                    int x = Integer.parseInt(matcher.group(1));
-                    int y = Integer.parseInt(matcher.group(2));
+                    x = Integer.parseInt(matcher.group(1));
+                    y = Integer.parseInt(matcher.group(2));
+
+                    moves.add(new Point(x, y));
+
                     System.out.print(String.format(" %d,%d", x, y));
-                    points.add(new Point(x, y));
                 }
             }
             System.out.println(" }");
         }
 
-        if (points.size() > 0) {
-            Random random = new Random();
-            int i = random.nextInt(points.size());
-            Point point = points.get(i);
-            System.out.println(String.format("> " + socket.getInetAddress().getHostAddress() + " received move %d,%d", point.x, point.y));
-            out.println(String.format("%d,%d", point.x, point.y));
+        if (moves.size() > 0) {
+            random = new Random();
+            int i = random.nextInt(moves.size());
+            move = moves.get(i);
+
+            out.println(String.format("%d,%d", move.x, move.y));
             out.flush();
+
+            System.out.println(String.format("> " + socket.getInetAddress().getHostAddress() + " received move %d,%d", move.x, move.y));
         }
     }
 }

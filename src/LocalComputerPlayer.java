@@ -13,7 +13,6 @@ public class LocalComputerPlayer extends Player {
     @Override
     public Point getMove() {
         Point[] moves = gameGrid.getValidMoves();
-        System.out.println(moves.length);
         int i = random.nextInt(moves.length);
         return moves[i];
     }
