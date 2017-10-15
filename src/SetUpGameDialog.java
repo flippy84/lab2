@@ -42,14 +42,14 @@ public class SetUpGameDialog extends DialogPane {
         player1Type.setItems(FXCollections.observableArrayList(
                 new HumanPlayer(playerInput),
                 new LocalComputerPlayer(gameGrid),
-                new RemoteComputerPlayer()
+                new RemoteComputerPlayer(gameGrid)
         ));
         player1Type.getSelectionModel().selectFirst();
 
         player2Type.setItems(FXCollections.observableArrayList(
                 new HumanPlayer(playerInput),
                 new LocalComputerPlayer(gameGrid),
-                new RemoteComputerPlayer()
+                new RemoteComputerPlayer(gameGrid)
         ));
         player2Type.getSelectionModel().selectFirst();
     }

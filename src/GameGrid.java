@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.util.Observable;
+import java.util.Vector;
 
 public class GameGrid extends Observable {
     private Marker[][] grid;
@@ -41,5 +43,19 @@ public class GameGrid extends Observable {
         }
         setChanged();
         notifyObservers();
+    }
+
+    public Point[] validMoves() {
+        Vector<Point> moves = new Vector<>();
+
+        for (int x = 0; x < columns; x++) {
+            for (int y = 0; y < rows; y++) {
+                if (grid[x][y] == Marker.None) {
+                    moves.add(new Point(x, y));
+                }
+            }
+        }
+
+        return (Point[])moves.toArray();
     }
 }

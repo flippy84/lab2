@@ -12,6 +12,7 @@ public class LocalComputerPlayer extends Player {
 
     @Override
     public Point getMove() {
+        //TODO: Use gameGrid.validMoves
         while (true) {
             int x = random.nextInt(gameGrid.getColumns());
             if (gameGrid.getCell(x, 0) == Marker.None)

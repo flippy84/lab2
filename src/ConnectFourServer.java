@@ -12,10 +12,10 @@ public class ConnectFourServer {
             return;
         }
 
-        ServerSocket serverSocket;
-        Socket clientSocket;
+        ServerSocket server;
+        Socket client;
         try {
-            serverSocket = new ServerSocket(5000);
+            server = new ServerSocket(5000);
         } catch (Exception e) {
             return;
         }
@@ -28,9 +28,10 @@ public class ConnectFourServer {
 
         try {
             while (true) {
-                clientSocket = serverSocket.accept();
-                ServerWorker worker = new ServerWorker(clientSocket);
-                worker.start();
+                client = server.accept();
+                RemoteComputerPlayer player = new RemoteComputerPlayer(client);
+                Thread thread = new Thread(player);
+                thread.start();
             }
         } catch (Exception e) {
             e.printStackTrace();
