@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import java.awt.*;
 
 public class GameManager {
@@ -19,6 +20,15 @@ public class GameManager {
                 move(player2);
                 if (stop)
                     break;
+
+                if (gameGrid.isFull()) {
+                    stop = true;
+                    Platform.runLater(() -> {
+                        DrawnDialog dialog = new DrawnDialog();
+                        dialog.showAndWait();
+                    });
+                    break;
+                }
             }
         }
     }
@@ -72,7 +82,10 @@ public class GameManager {
         Point landingPoint = getLandingPoint(point);
         gameGrid.setCell(player.markerID, landingPoint.x, landingPoint.y);
         if (hasWon(player, landingPoint)) {
-            System.out.println(player.name + " wins!");
+            Platform.runLater(() -> {
+                WinnerDialog dialog = new WinnerDialog(player);
+                dialog.showAndWait();
+            });
             stop = true;
         }
     }

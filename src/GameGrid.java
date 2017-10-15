@@ -59,4 +59,15 @@ public class GameGrid extends Observable {
 
         return moves.toArray(new Point[moves.size()]);
     }
+
+    public boolean isFull() {
+        for (int x = 0; x < columns; x++) {
+            for (int y = 0; y < rows; y++) {
+                if (grid[x][y] == Marker.None) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
