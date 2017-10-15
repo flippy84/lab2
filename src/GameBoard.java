@@ -9,8 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.awt.*;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -77,15 +75,13 @@ public class GameBoard extends Pane implements IHumanPlayerInput {
      */
     public Point getInput() {
         lock.lock();
-        while (true) {
-            try {
-                haveInput.await();
-                return input;
-            } catch (InterruptedException exception) {
-                return null;
-            } finally {
-                lock.unlock();
-            }
+        try {
+            haveInput.await();
+            return input;
+        } catch (InterruptedException exception) {
+            return null;
+        } finally {
+            lock.unlock();
         }
     }
 

@@ -12,7 +12,7 @@ public class GameFrame extends BorderPane {
     private Label statusLabel;
     private GameManager gameManager;
 
-    public GameFrame(GameManager gameManager, GameBoard gameBoard) throws Exception {
+    public GameFrame(GameManager gameManager, GameBoard gameBoard) {
         this.gameManager = gameManager;
 
         this.setTop(createTop());
@@ -22,9 +22,7 @@ public class GameFrame extends BorderPane {
 
     private Node createTop() {
         Button newGameButton = new Button("New game");
-        newGameButton.setOnMouseReleased((event -> {
-            gameManager.newGame();
-        }));
+        newGameButton.setOnMouseReleased((event -> gameManager.newGame()));
 
         Button quitButton = new Button("Quit");
         quitButton.setOnMouseReleased((event -> {

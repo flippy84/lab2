@@ -1,15 +1,11 @@
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class SetUpGameDialog extends DialogPane {
     private IHumanPlayerInput playerInput;
@@ -43,14 +39,14 @@ public class SetUpGameDialog extends DialogPane {
 
     @FXML
     private void initialize() {
-        player1Type.setItems(FXCollections.<Player>observableArrayList(
+        player1Type.setItems(FXCollections.observableArrayList(
                 new HumanPlayer(playerInput),
                 new LocalComputerPlayer(gameGrid),
                 new RemoteComputerPlayer()
         ));
         player1Type.getSelectionModel().selectFirst();
 
-        player2Type.setItems(FXCollections.<Player>observableArrayList(
+        player2Type.setItems(FXCollections.observableArrayList(
                 new HumanPlayer(playerInput),
                 new LocalComputerPlayer(gameGrid),
                 new RemoteComputerPlayer()

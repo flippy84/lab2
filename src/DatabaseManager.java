@@ -1,7 +1,5 @@
-import javax.xml.crypto.Data;
 import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.*;
 
 public class DatabaseManager {

@@ -1,7 +1,4 @@
-import javax.xml.crypto.Data;
-import java.io.IOException;
 import java.net.*;
-import java.sql.*;
 
 public class ConnectFourServer {
     public static void main(String[] args) {
@@ -36,7 +33,7 @@ public class ConnectFourServer {
                 worker.start();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

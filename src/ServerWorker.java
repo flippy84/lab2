@@ -24,11 +24,10 @@ public class ServerWorker extends Thread {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
     }
 
-    public void processInput(String line) {
+    private void processInput(String line) {
         switch (line) {
             case "hej":
                 System.out.println("cp");

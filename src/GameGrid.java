@@ -1,5 +1,4 @@
 import java.util.Observable;
-import java.util.Vector;
 
 public class GameGrid extends Observable {
     private Marker[][] grid;

@@ -47,8 +47,7 @@ public class GameManager {
         gameLoopThread.interrupt();
         try {
             gameLoopThread.join();
-        } catch (InterruptedException e) {
-            return;
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -98,7 +97,7 @@ public class GameManager {
         return false;
     }
 
-    enum Direction { Up, Down, Left, Right, UpLeft, UpRight, DownLeft, DownRight };
+    enum Direction { Up, Down, Left, Right, UpLeft, UpRight, DownLeft, DownRight }
 
     // Search for four consecutive markers in a row
     private boolean search(Player player, Point point, Direction direction) {
