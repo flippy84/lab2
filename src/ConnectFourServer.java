@@ -18,7 +18,6 @@ public class ConnectFourServer {
 
         databaseManager = new DatabaseManager();
         if (!databaseManager.updateServerDetails(localhost, port)) {
-            System.out.println("Error updating database");
             return;
         }
 

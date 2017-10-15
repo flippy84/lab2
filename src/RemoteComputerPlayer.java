@@ -72,7 +72,7 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         return null;
     }
 
-    private boolean connect() {
+    public boolean connect() {
         // Get server details from SQL Server
         DatabaseManager databaseManager = new DatabaseManager();
         ServerDetails details = databaseManager.getServerDetails();

@@ -8,6 +8,7 @@ import java.util.Optional;
 public class ConnectFour extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Optional<ButtonType> result;
         GameGrid gameGrid = new GameGrid();
         GameBoard gameBoard = new GameBoard(gameGrid);
         // GameBoard implements IHumanPlayerInput to support clicking on the GameBoard
@@ -15,10 +16,32 @@ public class ConnectFour extends Application {
         // Show a set up dialog and pass in IHumanPlayerInput for the HumanPlayer class
         SetUpGameDialog setup = new SetUpGameDialog(playerInput, gameGrid);
 
-        Dialog dialog = new Dialog();
-        dialog.setDialogPane(setup);
-        dialog.setTitle("New game");
-        Optional<ButtonType> result = dialog.showAndWait();
+        while (true) {
+            Player player1, player2;
+            Dialog dialog = new Dialog();
+            ErrorDialog errorDialog = new ErrorDialog("Error connecting to server");
+            dialog.setDialogPane(setup);
+            dialog.setTitle("New game");
+            result = dialog.showAndWait();
+
+            if (result.isPresent() && result.get().getButtonData() == ButtonData.OK_DONE) {
+                player1 = setup.getPlayer1();
+                player2 = setup.getPlayer2();
+
+                if (player1 instanceof RemoteComputerPlayer && !((RemoteComputerPlayer) player1).connect()) {
+                    errorDialog.showAndWait();
+                    continue;
+                }
+
+                if (player2 instanceof RemoteComputerPlayer && !((RemoteComputerPlayer) player2).connect()) {
+                    errorDialog.showAndWait();
+                    continue;
+                }
+            } else {
+                break;
+            }
+
+        }
 
         // If the user clicked OK start the game
         if (result.isPresent() && result.get().getButtonData() == ButtonData.OK_DONE)

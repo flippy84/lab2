@@ -32,6 +32,7 @@ public class DatabaseManager {
                 statement.executeUpdate(String.format("INSERT INTO [dbo].[ConnectFourServer] ([groupId], [ipAddress], [port]) VALUES (8, '%s', %d)", inetAddress.getHostAddress(), port));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -57,6 +58,7 @@ public class DatabaseManager {
             port = statement.getInt(3);
             inetAddress = Inet4Address.getByName(address);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return new ServerDetails(inetAddress, port);
