@@ -1,11 +1,11 @@
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ButtonBar.ButtonData;
 
 public class SetUpGameDialogPane extends DialogPane {
     private IHumanPlayerInput playerInput;

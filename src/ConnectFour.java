@@ -1,8 +1,8 @@
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.application.Application;
-import javafx.scene.control.*;
-import javafx.scene.control.ButtonBar.*;
+import javafx.scene.Scene;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 import java.util.Optional;
 
 public class ConnectFour extends Application {

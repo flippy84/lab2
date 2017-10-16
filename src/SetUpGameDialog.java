@@ -1,4 +1,4 @@
-import javafx.scene.control.*;
+import javafx.scene.control.Dialog;
 
 public class SetUpGameDialog extends Dialog {
     private SetUpGameDialogPane setup;

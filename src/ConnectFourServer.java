@@ -1,4 +1,7 @@
-import java.net.*;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ConnectFourServer {
     public static void main(String[] args) {
