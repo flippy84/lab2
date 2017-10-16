@@ -37,10 +37,8 @@ public class ConnectFour extends Application {
                     errorDialog.showAndWait();
                     continue;
                 }
-            } else {
-                break;
             }
-
+            break;
         }
 
         // If the user clicked OK start the game
