@@ -37,12 +37,6 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         Matcher matcher;
         int x, y;
 
-        // Connect and init socket if not done yet
-        if (socket == null) {
-            if (!connect())
-                return null;
-        }
-
         // Request a move from the server, format is GET_MOVE x,y ...
         out.print("GET_MOVE");
         moves = gameGrid.getValidMoves();
@@ -72,7 +66,21 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         return null;
     }
 
-    public boolean connect() {
+    @Override
+    public boolean init() {
+        if (connect()) {
+            return true;
+        } else {
+            ErrorDialog errorDialog = new ErrorDialog("Error connecting to server");
+            errorDialog.showAndWait();
+            return false;
+        }
+    }
+
+    private boolean connect() {
+        if (socket != null && socket.isConnected())
+            return true;
+
         // Get server details from SQL Server
         DatabaseManager databaseManager = new DatabaseManager();
         ServerDetails details = databaseManager.getServerDetails();
@@ -113,13 +121,13 @@ public class RemoteComputerPlayer extends Player implements Runnable {
             }
         } catch (SocketException e) {
             System.out.println("< " + socket.getInetAddress().getHostAddress() + " disconnected unexpectedly");
-            return;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     // Called by the client when closing
+    @Override
     public void close() {
         try {
             socket.close();

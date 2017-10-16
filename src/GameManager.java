@@ -63,10 +63,8 @@ public class GameManager {
 
     public void quit() {
         stop();
-        if (player1 instanceof RemoteComputerPlayer)
-            ((RemoteComputerPlayer) player1).close();
-        if (player2 instanceof RemoteComputerPlayer)
-            ((RemoteComputerPlayer) player2).close();
+        player1.close();
+        player2.close();
     }
 
     private void move(Player player) {

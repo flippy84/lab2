@@ -17,27 +17,14 @@ public class ConnectFour extends Application {
         SetUpGameDialog setup = new SetUpGameDialog(playerInput, gameGrid);
 
         while (true) {
-            Player player1, player2;
-            Dialog dialog = new Dialog();
-            ErrorDialog errorDialog = new ErrorDialog("Error connecting to server");
-            dialog.setDialogPane(setup);
-            dialog.setTitle("New game");
-            result = dialog.showAndWait();
+            result = setup.showAndWait();
 
             if (result.isPresent() && result.get().getButtonData() == ButtonData.OK_DONE) {
-                player1 = setup.getPlayer1();
-                player2 = setup.getPlayer2();
-
-                if (player1 instanceof RemoteComputerPlayer && !((RemoteComputerPlayer) player1).connect()) {
-                    errorDialog.showAndWait();
-                    continue;
-                }
-
-                if (player2 instanceof RemoteComputerPlayer && !((RemoteComputerPlayer) player2).connect()) {
-                    errorDialog.showAndWait();
+                if (!setup.getPlayer1().init() || !setup.getPlayer2().init()) {
                     continue;
                 }
             }
+
             break;
         }
 
