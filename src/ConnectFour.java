@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+
 import java.util.Optional;
 
 /**
@@ -15,7 +16,7 @@ public class ConnectFour extends Application {
     /**
      * This method is called
      * @param primaryStage Supplied stage from JavaFX where our game scene is added.
-     * @throws Exception
+     * @throws Exception Throws an exception if the initialization of the game fails.
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,7 +49,7 @@ public class ConnectFour extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.setTitle("Connect Four");
-            primaryStage.setOnCloseRequest(event -> gameManager.quit());
+            primaryStage.setOnCloseRequest(event -> gameManager.close());
 
             primaryStage.show();
             gameManager.play();

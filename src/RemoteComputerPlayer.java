@@ -93,7 +93,7 @@ public class RemoteComputerPlayer extends Player implements Runnable {
     /**
      * Initialize the client and connect to the server, displays
      * an error if the server doesn't respond.
-     * @return
+     * @return True if the connection was successful.
      */
     @Override
     public boolean init() {

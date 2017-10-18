@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+
 import java.awt.*;
 
 /**
@@ -61,7 +62,7 @@ public class GameManager {
         gameLoopThread.start();
     }
 
-    public void quit() {
+    public void close() {
         stop();
         player1.close();
         player2.close();
