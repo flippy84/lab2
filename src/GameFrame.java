@@ -2,22 +2,30 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+/**
+ * GameFrame is the main class for the UI, it hosts a GameBoard and contains two buttons
+ * for new game and quit.
+ * @author Andreas Carlsson
+ */
 public class GameFrame extends BorderPane {
-    private Label statusLabel;
     private GameManager gameManager;
 
+    /**
+     * GameFrame constructor creates and initializes the main UI.
+     * @param gameManager GameManager reference used for starting a
+     *                    new game when the current one has ended.
+     * @param gameBoard GameBoard reference for displaying the game board.
+     */
     public GameFrame(GameManager gameManager, GameBoard gameBoard) {
         this.gameManager = gameManager;
 
         this.setTop(createTop());
         this.setCenter(gameBoard);
-        this.setBottom(createBottom());
     }
 
     private Node createTop() {
@@ -26,6 +34,7 @@ public class GameFrame extends BorderPane {
 
         Button quitButton = new Button("Quit");
         quitButton.setOnMouseReleased((event -> {
+            //Get the parent main stage from a button to send a window close request to exit the game.
             Stage stage = (Stage)quitButton.getScene().getWindow();
             stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
         }));
@@ -37,16 +46,5 @@ public class GameFrame extends BorderPane {
         buttons.getChildren().addAll(newGameButton, quitButton);
 
         return buttons;
-    }
-
-    private Node createBottom() {
-        statusLabel = new Label();
-        statusLabel.setPadding(new Insets(5, 5, 5, 5));
-
-        return statusLabel;
-    }
-
-    public void setStatus(String text) {
-        statusLabel.setText(text);
     }
 }

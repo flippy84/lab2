@@ -6,12 +6,19 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import java.io.IOException;
 
+/**
+ * Internal class used by SetUpGameDialog that loads the UI from
+ * a FXML file.
+ * @author Andreas Carlsson
+ * @see SetUpGameDialog
+ */
 public class SetUpGameDialogPane extends DialogPane {
     private IHumanPlayerInput playerInput;
     private GameGrid gameGrid;
 
-    public SetUpGameDialogPane(IHumanPlayerInput playerInput, GameGrid gameGrid) throws Exception {
+    public SetUpGameDialogPane(IHumanPlayerInput playerInput, GameGrid gameGrid) throws IOException {
         //Save a reference to the board for human player input support
         this.playerInput = playerInput;
         this.gameGrid = gameGrid;
@@ -54,6 +61,10 @@ public class SetUpGameDialogPane extends DialogPane {
         player2Type.getSelectionModel().selectFirst();
     }
 
+    /**
+     * Returns player one.
+     * @return Returns a Player object for player one.
+     */
     public Player getPlayer1() {
         Player player1 = player1Type.getSelectionModel().getSelectedItem();
         player1.name = player1Name.getText();
@@ -61,6 +72,10 @@ public class SetUpGameDialogPane extends DialogPane {
         return player1;
     }
 
+    /**
+     * Returns player two.
+     * @return Returns a Player object for player two.
+     */
     public Player getPlayer2() {
         Player player2 = player2Type.getSelectionModel().getSelectedItem();
         player2.name = player2Name.getText();

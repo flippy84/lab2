@@ -9,6 +9,12 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Works like the LocalComputerPlayer except this class communicates
+ * over a socket. Used by both the game server and game client.
+ * @author Andreas Carlsson
+ * @see LocalComputerPlayer
+ */
 public class RemoteComputerPlayer extends Player implements Runnable {
     private Socket socket;
     private GameGrid gameGrid;
@@ -16,11 +22,22 @@ public class RemoteComputerPlayer extends Player implements Runnable {
     private PrintWriter out;
     private Pattern pattern;
 
+    /**
+     * Construct the server part of the RemoteComputerPlayer that uses
+     * the given socket for communicating with the game client.
+     * @param socket Reference to an open socket for use with
+     *               communicating with the game client.
+     */
     public RemoteComputerPlayer(Socket socket) {
         this();
         this.socket = socket;
     }
 
+    /**
+     * The client part of the RemoteComputerPlayer.
+     * @param gameGrid Reference to a GameGrid used for
+     *                 sending valid moves in the current grid.
+     */
     public RemoteComputerPlayer(GameGrid gameGrid) {
         this();
         this.gameGrid = gameGrid;
@@ -30,6 +47,13 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         pattern = Pattern.compile("(\\d+),(\\d+)");
     }
 
+    /**
+     * Gets a move from the server given a set of valid moves
+     * in the current GameGrid. The format of the request is:
+     * "GET_MOVE x,y ..."
+     * The response is a point with the format "x,y".
+     * @return Returns the move sent from the server.
+     */
     @Override
     public Point getMove() {
         String response;
@@ -66,17 +90,26 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         return null;
     }
 
+    /**
+     * Initialize the client and connect to the server, displays
+     * an error if the server doesn't respond.
+     * @return
+     */
     @Override
     public boolean init() {
         if (connect()) {
             return true;
         } else {
-            ErrorDialog errorDialog = new ErrorDialog("Error connecting to server");
-            errorDialog.showAndWait();
+            ErrorDialog errorDialog = new ErrorDialog();
+            errorDialog.showAndWait("Error connecting to server");
             return false;
         }
     }
 
+    /**
+     * Connect to the server by getting the last updated
+     * address and port from the SQL Server.
+     */
     private boolean connect() {
         if (socket != null && socket.isConnected())
             return true;
@@ -102,6 +135,12 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         return "RemoteComputerPlayer";
     }
 
+    /**
+     * This method is run in a new thread when the server gets a new
+     * connection from a client, enters a loop waiting for lines from
+     * the client and terminates when the client closes the connection
+     * or a network error occurs.
+     */
     @Override
     public void run() {
         String request;
@@ -126,7 +165,9 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         }
     }
 
-    // Called by the client when closing
+    /**
+     * Closes the socket used by the client.
+     */
     @Override
     public void close() {
         try {
@@ -136,6 +177,11 @@ public class RemoteComputerPlayer extends Player implements Runnable {
         }
     }
 
+    /*
+     * Handles a request from a client parsing the given points
+     * in the request and returns a randomized point from the
+     * given points.
+     */
     private void handleRequest(String request, PrintWriter out) {
         Vector<Point> moves = new Vector<>();
         Point move;

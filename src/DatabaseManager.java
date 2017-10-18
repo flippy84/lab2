@@ -2,6 +2,14 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.sql.*;
 
+/**
+ * DatabaseManager handles reading from and updating the address and port of the server into a SQL Server database.
+ * When the server starts it updates the table with information of the running servers address and port.
+ * The client uses the address and port to connect to the server when a RemoteComputerPlayer is selected as one of
+ * the players and asks for game moves from the server over a socket.
+ * @author Andreas Carlsson
+ * @see RemoteComputerPlayer
+ */
 public class DatabaseManager {
     private String connectionString = "jdbc:sqlserver://hitsql-db.hb.se:56077;databaseName=oomuht1608;user=oomuht1608;password=spad66;";
 
