@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ConnectFour extends Application {
 
     /**
-     * This method is called
+     * This method is the entry point for the JavaFX application.
      * @param primaryStage Supplied stage from JavaFX where our game scene is added.
      * @throws Exception Throws an exception if the initialization of the game fails.
      */
